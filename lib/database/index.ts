@@ -18,6 +18,8 @@ export const connectToDatabase = async () => {
       bufferCommands: false,
     });
 
+  console.log(">>>>>>> Connected to DB");
+
   cached.conn = await cached.promise;
 
   return cached.conn;

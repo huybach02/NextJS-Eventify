@@ -1,11 +1,22 @@
+import Collection from "@/components/shared/Collection";
 import {Button} from "@/components/ui/button";
+import {getAllCategories} from "@/lib/actions/category.action";
+import {getAllEvents} from "@/lib/actions/event.action";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Home() {
+export default async function Home() {
+  await getAllCategories();
+  const events = await getAllEvents({
+    query: "",
+    category: "",
+    page: 1,
+    limit: 6,
+  });
+
   return (
     <>
-      <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
+      <section className="bg-primary-50 bg-contain py-5 md:py-10">
         <div className="wrapper grid grid-cols-1 gap-5 md:grid-cols-2">
           <div className="flex flex-col justify-center gap-8">
             <h1 className="h1-bold">
@@ -16,7 +27,9 @@ export default function Home() {
               over 10,000 journeys booked daily, start exploring now!
             </p>
             <Button size={"sm"}>
-              <Link href={"#events"}>Booking Now</Link>
+              <Link href={"#events"} className="w-full">
+                Booking Now
+              </Link>
             </Button>
           </div>
           <Image
@@ -43,6 +56,15 @@ export default function Home() {
         <div className="flex w-full flex-col gap-5 md:flex-col">
           Search Category
         </div>
+        <Collection
+          data={events?.data}
+          emptyTitle="No Events Found"
+          emptyStateSubtext="Please come back later"
+          collectionType="All_Events"
+          limit={6}
+          page={1}
+          totalPages={2}
+        />
       </section>
     </>
   );

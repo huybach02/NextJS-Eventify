@@ -4,7 +4,7 @@ export interface IEvent extends Document {
   _id: string;
   title: string;
   description?: string;
-  location?: string;
+  location: string;
   createdAt: Date;
   imageUrl: string;
   startDateTime: Date;
