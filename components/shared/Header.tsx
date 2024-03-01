@@ -29,7 +29,9 @@ const Header = async (props: Props) => {
               <div className="w-full flex items-center gap-3">
                 <UserButton afterSignOutUrl="/" />
                 <span className="flex-1">
-                  {user?.firstName} {user?.lastName}
+                  {user?.firstName && user?.lastName
+                    ? `${user?.firstName} ${user?.lastName}`
+                    : `${user?.username}`}
                 </span>
                 <MobileNav />
               </div>

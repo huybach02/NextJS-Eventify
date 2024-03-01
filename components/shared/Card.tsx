@@ -22,7 +22,7 @@ const Card = ({event, hasOrderLink, hidePrice}: Props) => {
   return (
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-md bg-gray-50 shadow-md transition-all hover:shadow-xl md:min-h-[440px]">
       <Link
-        href={`events/${event._id}`}
+        href={`/events/${event._id}`}
         style={{backgroundImage: `url(${event.imageUrl})`}}
         className="flex-center flex-grow bg-cover bg-center"
       />
@@ -36,25 +36,26 @@ const Card = ({event, hasOrderLink, hidePrice}: Props) => {
           <DeleteConfirm eventId={event._id} />
         </div>
       )}
-      <Link
-        href={`events/${event._id}`}
-        className="flex min-h-[230px] flex-col gap-2 px-5 py-3 "
-      >
+      <div className="flex min-h-[230px] flex-col gap-2 px-5 py-3 ">
         <div className="flex items-center gap-3">
           {!hidePrice && (
             <span className="bg-primary-500 px-5 py-1 rounded-full text-white">
               {event.isFree ? "FREE" : `$${event.price}`}
             </span>
           )}
-          <span className="bg-gray-300 px-5 py-1 rounded-full text-gray-500">
-            {event.category.name}
+          <span className="bg-gray-300 px-5 py-1 rounded-full text-gray-500 line-clamp-1">
+            {event.category.name.length > 10
+              ? event.category.name.slice(1, 10) + "..."
+              : event.category.name}
           </span>
         </div>
-        <p className="font-bold text-2xl text-primary-500">
-          {event.title.length > 55
-            ? event.title.slice(1, 52) + "..."
-            : event.title}
-        </p>
+        <Link href={`/events/${event._id}`}>
+          <p className="font-bold text-2xl text-primary-500">
+            {event.title.length > 55
+              ? event.title.slice(1, 52) + "..."
+              : event.title}
+          </p>
+        </Link>
         <p className="flex gap-3 items-center ">
           <span className="text-red-400">
             <FaCalendarAlt />
@@ -83,7 +84,7 @@ const Card = ({event, hasOrderLink, hidePrice}: Props) => {
             <p>Order Details</p>
           </Link>
         )}
-      </Link>
+      </div>
     </div>
   );
 };

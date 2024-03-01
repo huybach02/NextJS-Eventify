@@ -4,6 +4,8 @@ import {
   CreateEventParams,
   DeleteEventParams,
   GetAllEventsParams,
+  GetEventsByUserParams,
+  GetRelatedEventsByCategoryParams,
   UpdateEventParams,
 } from "@/types";
 import {handleError} from "../utils";
@@ -116,6 +118,65 @@ export async function updateEvent({userId, event, path}: UpdateEventParams) {
     revalidatePath(path);
 
     return JSON.parse(JSON.stringify(updatedEvent));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function getRelatedEventsByCategory({
+  categoryId,
+  eventId,
+  limit = 3,
+  page = 1,
+}: GetRelatedEventsByCategoryParams) {
+  try {
+    await connectToDatabase();
+
+    const skipAmount = (Number(page) - 1) * limit;
+    const conditions = {$and: [{category: categoryId}, {_id: {$ne: eventId}}]};
+
+    const events = await Event.find(conditions)
+      .sort({createdAt: -1})
+      .skip(skipAmount)
+      .limit(limit)
+      .populate("organizer", "_id firstName lastName")
+      .populate("category", "_id name");
+
+    const eventsCount = await Event.countDocuments(conditions);
+
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function getEventsByUser({
+  userId,
+  limit = 6,
+  page,
+}: GetEventsByUserParams) {
+  try {
+    await connectToDatabase();
+
+    const conditions = {organizer: userId};
+    const skipAmount = (+page - 1) * limit;
+
+    const events = await Event.find(conditions)
+      .sort({createdAt: "desc"})
+      .skip(skipAmount)
+      .limit(limit)
+      .populate("organizer", "_id firstName lastName")
+      .populate("category", "_id name");
+
+    const eventsCount = await Event.countDocuments(conditions);
+
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / limit),
+    };
   } catch (error) {
     handleError(error);
   }

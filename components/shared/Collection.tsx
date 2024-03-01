@@ -44,7 +44,7 @@ const Collection = ({
         </div>
       ) : (
         <div className="text-center">
-          <h3>{emptyTitle}</h3>
+          <h3 className="font-bold text-xl md:h5-bold mb-3">{emptyTitle}</h3>
           <p>{emptyStateSubtext}</p>
         </div>
       )}
