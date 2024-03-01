@@ -1,6 +1,8 @@
 import Collection from "@/components/shared/Collection";
 import {Button} from "@/components/ui/button";
 import {getEventsByUser} from "@/lib/actions/event.action";
+import {getOrdersByUser} from "@/lib/actions/order.action";
+import {IOrder} from "@/lib/database/models/order.model";
 import {auth} from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
@@ -14,6 +16,9 @@ const ProfilePage = async (props: Props) => {
   const userId = sessionClaims?.userId as string;
 
   const organizedEvents = await getEventsByUser({userId, page: 1});
+  const orders = await getOrdersByUser({userId, page: 1});
+  const orderedEvents = orders?.data.map((order: IOrder) => order.event);
+  console.log("orderedEvents: ", orderedEvents);
 
   return (
     <>
@@ -31,7 +36,7 @@ const ProfilePage = async (props: Props) => {
 
       <section className="wrapper my-8">
         <Collection
-          data={[]}
+          data={orderedEvents?.data}
           emptyTitle="No Event Tickets"
           emptyStateSubtext="Do not worry! - Please explore the events and choose the right event for yourself"
           collectionType="My_Tickets"
