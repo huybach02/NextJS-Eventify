@@ -12,7 +12,7 @@ import React from "react";
 import {FaCalendarAlt} from "react-icons/fa";
 import {FaLocationDot} from "react-icons/fa6";
 
-const EventDetail = async ({params: {id}}: SearchParamProps) => {
+const EventDetail = async ({params: {id}, searchParams}: SearchParamProps) => {
   await getAllCategories();
   const event = await getEventById(id);
 
@@ -106,9 +106,9 @@ const EventDetail = async ({params: {id}}: SearchParamProps) => {
           emptyTitle="No Events Found"
           emptyStateSubtext="Please come back later"
           collectionType="All_Events"
-          limit={6}
-          page={1}
-          totalPages={2}
+          limit={3}
+          page={searchParams?.page as string}
+          totalPages={relatedEvents?.totalPages}
         />
       </section>
     </>

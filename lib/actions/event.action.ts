@@ -13,6 +13,7 @@ import {connectToDatabase} from "../database";
 import User from "../database/models/user.model";
 import Event from "../database/models/event.model";
 import {revalidatePath} from "next/cache";
+import {getCategoryByName} from "./category.action";
 
 export const createEvent = async ({event, userId, path}: CreateEventParams) => {
   try {
@@ -63,11 +64,22 @@ export const getAllEvents = async ({
   try {
     await connectToDatabase();
 
-    const conditions = {};
+    const titleCondition = query ? {title: {$regex: query, $options: "i"}} : {};
+    const categoryCondition = category
+      ? await getCategoryByName(category)
+      : null;
+    const conditions = {
+      $and: [
+        titleCondition,
+        categoryCondition ? {category: categoryCondition._id} : {},
+      ],
+    };
+
+    const skip = (+page - 1) * limit;
 
     const events = await Event.find(conditions)
       .sort({createdAt: -1})
-      .skip(0)
+      .skip(skip)
       .limit(limit)
       .populate("organizer", "_id firstName lastName")
       .populate("category", "_id name");
