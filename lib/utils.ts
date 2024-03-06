@@ -66,10 +66,14 @@ export const formatPrice = (price: string) => {
   return formattedPrice;
 };
 
-export function formUrlQuery({params, key, value}: UrlQueryParams) {
+export function formUrlQuery({params, key, value, pageOne}: UrlQueryParams) {
   const currentUrl = qs.parse(params);
 
   currentUrl[key] = value;
+
+  if (pageOne) {
+    currentUrl["page"] = "1";
+  }
 
   return qs.stringifyUrl(
     {

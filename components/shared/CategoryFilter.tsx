@@ -29,6 +29,7 @@ const CategoryFilter = (props: Props) => {
         params: searchParams.toString(),
         key: "category",
         value: category,
+        pageOne: true,
       });
     } else {
       newUrl = removeKeysFromQuery({

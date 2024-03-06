@@ -33,7 +33,7 @@ const EventDetail = async ({params: {id}, searchParams}: SearchParamProps) => {
             height={1000}
             className="h-full min-h-[300px] object-cover object-center rounded-md"
           />
-          <div className="flex w-full flex-col gap-3 pl-8">
+          <div className="flex w-full flex-col gap-3 md:pl-8">
             <div className="flex flex-col gap-5">
               <h2 className="h2-bold mt-5">{event.title}</h2>
               <div className="flex flex-col gap-5 sm:flex-row sm:items-center">

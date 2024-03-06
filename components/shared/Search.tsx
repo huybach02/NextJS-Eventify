@@ -24,6 +24,7 @@ const Search = ({placeholder}: Props) => {
           params: searchParams.toString(),
           key: "query",
           value: query,
+          pageOne: true,
         });
       } else {
         newUrl = removeKeysFromQuery({
